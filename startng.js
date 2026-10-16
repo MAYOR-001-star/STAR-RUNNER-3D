@@ -44,7 +44,8 @@
     }).catch(function () { return null; });
   }
   var guestStyle = { body: 'male', primaryColor: '#4b7bec', secondaryColor: '#2b2f4a', skinColor: '#c68642', hairColor: '#17120f', hair: 'short', hat: 'none', accessory: 'none' };
-  var player = { name: 'Guest', account: null, style: guestStyle, face: '', signedIn: false, id: null };
+  var DEFAULT_FACE = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="%23d8fd71"/><circle cx="22" cy="18" r="6" fill="%23141414"/><ellipse cx="22" cy="26" rx="7" ry="4" fill="none" stroke="%23141414" stroke-width="1.5"/></svg>';
+  var player = { name: 'Guest', account: null, style: guestStyle, face: DEFAULT_FACE, signedIn: false, id: null };
   function $(id) { return document.getElementById(id); }
   function toast(t) {
     var e = $('toast'); if (!e) return;
@@ -63,7 +64,7 @@
     $('player-name').textContent = player.name;
     $('player-account').textContent = player.signedIn ? ('@' + player.account) : 'Not signed in';
     $('player-signin').hidden = player.signedIn;
-    if (player.face) $('player-face').src = player.face;
+    $('player-face').src = player.face;
     var pb = parseInt(localStorage.getItem('sr3d_best') || '0', 10);
     var bl = $('best-line');
     if (bl) bl.textContent = pb > 0 ? ('Your device best: ' + pb + 'm') : 'Sign in with start.ng to save scores.';
@@ -74,12 +75,12 @@
         var u = reply.user;
         var st = {};
         for (var k in guestStyle) st[k] = (u.style && u.style[k]) || guestStyle[k];
-        player = { name: u.name || 'Runner', account: u.account || '', style: st, face: u.face || '', signedIn: true, id: u.id };
+        player = { name: u.name || 'Runner', account: u.account || '', style: st, face: u.face || DEFAULT_FACE, signedIn: true, id: u.id };
       } else if (reply && reply.guest) {
         var g = reply.guest || {};
         var st2 = {};
         for (var k2 in guestStyle) st2[k2] = (g.style && g.style[k2]) || guestStyle[k2];
-        player = { name: g.name || 'Guest', account: null, style: st2, face: g.face || '', signedIn: false, id: null };
+        player = { name: g.name || 'Guest', account: null, style: st2, face: g.face || DEFAULT_FACE, signedIn: false, id: null };
       }
       paintPlayer();
       if (window.buildAvatar) window.buildAvatar();
