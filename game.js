@@ -101,6 +101,7 @@
     if (state === 'paused') state = 'play';
     state = 'over';
     $('btn-pause').hidden = true;
+    $('pause-menu').hidden = true;
     var d = Math.floor(dist);
     var pb = parseInt(localStorage.getItem('sr3d_best') || '0', 10);
     if (d > pb) localStorage.setItem('sr3d_best', String(d));
